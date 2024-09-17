@@ -9,14 +9,14 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+        //git branch: 'main', url: 'https://github.com/kailas135/Jenkins_zero-2_hero.git'
       }
     }
 
     stage('Create EKS Cluster: EKS') {
       steps {
         script {
-        dir('Jenkins-Zero-To-Hero\terraform_eks') {
+        dir('terraform_eks') {
         sh """
             terraform init -upgrade
             terraform refresh
