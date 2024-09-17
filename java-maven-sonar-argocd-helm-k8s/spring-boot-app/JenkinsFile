@@ -16,7 +16,7 @@ pipeline {
     stage('Create EKS Cluster: EKS') {
       steps {
         script {
-        dir('terraform_eks') {
+        dir('Jenkins-Zero-To-Hero\terraform_eks') {
         sh """
             terraform init -upgrade
             terraform refresh
