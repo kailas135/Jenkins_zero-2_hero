@@ -12,6 +12,23 @@ pipeline {
         //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
       }
     }
+
+    stage('Create EKS Cluster: EKS') {
+      steps {
+        script {
+        dir('terraform_eks') {
+        sh """
+            terraform init -upgrade
+            terraform refresh
+            terraform plan
+            terraform state list
+            terraform apply -auto-approve
+          """
+          }
+        }
+      }
+    }
+
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
