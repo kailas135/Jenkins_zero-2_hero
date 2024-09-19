@@ -6,6 +6,11 @@ pipeline {
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock --rm=false' // prevent container removal
     }
   }
+
+  parameters {
+    string(name: 'TERRAFORM_VERSION', defaultValue: '1.9.5', description: 'Version of Terraform to install')
+  }
+  
   stages {
     stage('Checkout') {
       steps {
