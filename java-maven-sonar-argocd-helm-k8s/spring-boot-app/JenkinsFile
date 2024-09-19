@@ -5,11 +5,16 @@ pipeline {
       // args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock --rm=false' // prevent container removal
     }
-  }
 
+  
+  }
+  environment {
+    TERRAFORM_VERSION = '1.9.5' // Replace with the correct version
+}
   parameters {
     string(name: 'TERRAFORM_VERSION', defaultValue: '1.9.5', description: 'Version of Terraform to install')
   }
+
   
   stages {
     stage('Checkout') {
