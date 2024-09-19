@@ -6,6 +6,7 @@ pipeline {
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock --rm=false' // prevent container removal
     }
 
+
   }
   environment {
     TERRAFORM_VERSION = '1.9.5' // Replace with the correct version
@@ -14,13 +15,46 @@ pipeline {
     string(name: 'TERRAFORM_VERSION', defaultValue: '1.9.5', description: 'Version of Terraform to install')
   }
 
+  
   stages {
     stage('Checkout') {
       steps {
-        sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+        git branch: 'main', url: 'https://github.com/kailas135/Jenkins_zero-2_hero.git'       
       }
     }
+
+  stage('Install Terraform') {
+    steps {
+      sh """
+         apt-get update && apt-get install -y wget unzip
+         # Specify the Terraform version
+         TERRAFORM_VERSION="1.9.5"
+         echo "Installing Terraform version: ${TERRAFORM_VERSION}"
+         wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+         unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+         mv terraform /usr/local/bin/
+         terraform --version
+        """
+  }
+}
+
+
+    stage('Create EKS Cluster: EKS') {
+      steps {
+        script {
+        dir('terraform_eks') {
+        sh """
+            terraform init -upgrade
+            terraform refresh
+            terraform plan
+            terraform state list
+            terraform apply -auto-approve
+          """
+          }
+        }
+      }
+    }
+
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
